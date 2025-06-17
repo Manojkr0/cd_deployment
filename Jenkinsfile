@@ -1,12 +1,10 @@
 pipeline {
     agent any
 
-properties([
-    parameters([
+    parameters{
         string(name: 'GIT_REPO_URL',  description: 'Git repository URL to clone'),
         string(name: 'BRANCH_NAME',  description: 'Branch name to build'),
-    ])
-])
+            }
 
     stages {
         stage('Clone Repo') {
