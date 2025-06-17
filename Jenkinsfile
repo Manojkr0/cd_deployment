@@ -12,7 +12,7 @@ properties([
         stage('Clone Repo') {
     steps {
         script {
-            git credentialsId: 'github-cred-id', url: "${parms.GIT_REPO_URL}", branch: "${parms.BRANCH_NAME}"
+            git credentialsId: 'github-cred-id', url: "${params.GIT_REPO_URL}", branch: "${params.BRANCH_NAME}"
         }
     }
 }
