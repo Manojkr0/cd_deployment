@@ -1,21 +1,26 @@
 pipeline {
     agent any
-
-    parameters {
-        string(name: 'IMAGE_NAME', description: 'Docker Image Name (e.g., user/image)')
-        string(name: 'IMAGE_TAG',  description: 'Docker Image Tag')
-        string(name: 'BRANCH_NAME', description: 'Git Branch to Checkout')
-        string(name: 'GIT_REPO_URL', description: 'Git Repository URL')
-    }
-
-    environment {
-        DOCKER_IMAGE = "${params.IMAGE_NAME}:${params.IMAGE_TAG}"
-    }
+    
 
     stages {
+      stage('Read Properties') {
+      steps {
+        script {
+          // Load properties from the file in the workspace
+          def props = readProperties file: 'jenkins.properties'
+
+          // You can also assign them to environment variables if needed
+          env.GIT_REPO_URL = props['GIT_REPO_URL']
+          env.IMAGE_NAME = props['IMAGE_NAME']
+          env.IMAGE_TAG = props['IMAGE_TAG']
+          env.BRANCH_NAME = props['BRANCH_NAME']
+          env. DOCKER_IMAGE = $IMAGE_NAME : $IMAGE_TAG
+        }
+      }
+    }
         stage('Clone Repo') {
             steps {
-                git branch: "${params.BRANCH_NAME}", credentialsId: 'github-cred-id', url: "${params.GIT_REPO_URL}"
+                git branch: $BRANCH_NAME, credentialsId: 'github-cred-id', url: $GIT_REPO_URL
             }
         }
 
