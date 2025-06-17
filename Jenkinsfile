@@ -34,7 +34,7 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t $DOCKER_IMAGE .'
+                sh 'docker build -t "${env.DOCKER_IMAGE}" .'
             }
         }
 
@@ -47,7 +47,7 @@ pipeline {
                 )]) {
                     sh '''
                         echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-                        docker push $DOCKER_IMAGE
+                        docker push "${env.DOCKER_IMAGE}"
                         docker logout
                     '''
                 }
