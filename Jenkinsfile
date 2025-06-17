@@ -30,14 +30,14 @@ pipeline {
                     env.IMAGE_NAME = props['IMAGE_NAME']
                     env.IMAGE_TAG  = props['IMAGE_TAG']
                     env.DOCKER_IMAGE = "${env.IMAGE_NAME}:${env.IMAGE_TAG}"
-                    echo "📦 Image to build: ${env.DOCKER_IMAGE}"
+                    echo "📦 Image to build: ${env.IMAGE_NAME}:${env.IMAGE_TAG}"
                 }
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                sh "docker build -t ${env.DOCKER_IMAGE} ."
+                sh "docker build -t ${env.IMAGE_NAME}:${env.IMAGE_TAG} ."
             }
         }
 
@@ -53,7 +53,7 @@ pipeline {
                     script {
                         sh """
                             echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-                            docker push '${env.DOCKER_IMAGE}'
+                            docker push ${env.IMAGE_NAME}:${env.IMAGE_TAG}
                             docker logout
                         """
                     }
@@ -64,7 +64,7 @@ pipeline {
 
     post {
         success {
-            echo "✅ Docker image pushed: ${env.DOCKER_IMAGE}"
+            echo "✅ Docker image pushed: ${env.IMAGE_NAME}:${env.IMAGE_TAG}"
         }
         failure {
             echo "❌ Pipeline failed"
