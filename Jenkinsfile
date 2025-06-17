@@ -2,10 +2,10 @@ pipeline {
     agent any
 
     parameters {
-        string(name: 'IMAGE_NAME', defaultValue: 'manojkumar8008/myapp1', description: 'Docker Image Name (e.g., user/image)')
-        string(name: 'IMAGE_TAG', defaultValue: 'latest', description: 'Docker Image Tag')
-        string(name: 'BRANCH_NAME', defaultValue: 'master', description: 'Git Branch to Checkout')
-        string(name: 'GIT_REPO_URL', defaultValue: 'https://github.com/Manojkr0/python_code.git', description: 'Git Repository URL')
+        string(name: 'IMAGE_NAME', description: 'Docker Image Name (e.g., user/image)')
+        string(name: 'IMAGE_TAG',  description: 'Docker Image Tag')
+        string(name: 'BRANCH_NAME', description: 'Git Branch to Checkout')
+        string(name: 'GIT_REPO_URL', description: 'Git Repository URL')
     }
 
     environment {
