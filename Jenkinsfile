@@ -6,11 +6,7 @@ pipeline {
         string(name: 'BRANCH_NAME', description: 'Branch name to build')
     }
 
-    environment {
-        IMAGE_NAME = ''
-        IMAGE_TAG  = ''
-        DOCKER_IMAGE = ''
-    }
+
 
     stages {
         stage('Clone Repo') {
