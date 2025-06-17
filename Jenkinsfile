@@ -15,7 +15,6 @@ pipeline {
           env.IMAGE_TAG = props['IMAGE_TAG']
           env.BRANCH_NAME = props['BRANCH_NAME']
           env.DOCKER_IMAGE = "$IMAGE_NAME : $IMAGE_TAG"
-        }
       }
     }
         stage('Clone Repo') {
