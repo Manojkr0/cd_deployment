@@ -19,7 +19,7 @@ properties([
 stage('Read Properties') {
     steps {
         script {
-            def props =  readProperties file: 'jenkins.properties'
+            def props =  readProperties file: 'app/jenkins.properties'
              
 
             env.IMAGE_NAME   = props['IMAGE_NAME'] 
