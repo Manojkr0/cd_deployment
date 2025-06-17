@@ -6,9 +6,6 @@ pipeline {
         string(name: 'BRANCH_NAME', description: 'Branch name to build')
     }
 
-    environment {
-        DOCKER_IMAGE = ''
-    }
 
     stages {
         stage('Clone Repo') {
@@ -27,7 +24,7 @@ pipeline {
                     def props = readProperties file: 'jenkins.properties'
                     env.IMAGE_NAME = props['IMAGE_NAME']
                     env.IMAGE_TAG  = props['IMAGE_TAG']
-                    env.DOCKER_IMAGE = "${env.IMAGE_NAME}:${env.IMAGE_TAG}"
+                    env.DOCKER_IMAGE = ${env.IMAGE_NAME}:${env.IMAGE_TAG}
                     echo "${env.DOCKER_IMAGE}"
                 }
             }
@@ -35,7 +32,7 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t "${env.DOCKER_IMAGE}" .'
+                sh "docker build -t ${env.IMAGE_NAME}:${env.IMAGE_TAG} ."
             }
         }
 
@@ -48,7 +45,7 @@ pipeline {
                 )]) {
                     sh '''
                         echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-                        docker push "${env.DOCKER_IMAGE}"
+                        docker push ${env.IMAGE_NAME}:${env.IMAGE_TAG}
                         docker logout
                     '''
                 }
