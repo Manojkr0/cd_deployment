@@ -14,12 +14,12 @@ pipeline {
           env.IMAGE_NAME = props['IMAGE_NAME']
           env.IMAGE_TAG = props['IMAGE_TAG']
           env.BRANCH_NAME = props['BRANCH_NAME']
-          env.DOCKER_IMAGE = "${IMAGE_NAME} : ${IMAGE_TAG}"
+          env.DOCKER_IMAGE = "${env.IMAGE_NAME} : ${env.IMAGE_TAG}"
       }
     }
         stage('Clone Repo') {
             steps {
-                git branch: $BRANCH_NAME, credentialsId: 'github-cred-id', url: $GIT_REPO_URL
+                git branch: ${env.BRANCH_NAME}, credentialsId: 'github-cred-id', url: ${env.GIT_REPO_URL}
             }
         }
 
