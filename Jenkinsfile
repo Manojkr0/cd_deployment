@@ -34,20 +34,20 @@ pipeline {
                 sh "docker build -t ${env.IMAGE_NAME}:${env.IMAGE_TAG} ."
             }
         }
-
         stage('Push to Docker Hub') {
-            steps {
-                 withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) 
-                {
-                    script {
-                    sh '''
-                        echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-                        docker push ${env.IMAGE_NAME}:${env.IMAGE_TAG}
-                        docker logout
-                    '''
-                    }
-                }
+    steps {
+        withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+            script {
+                sh """
+                    echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+                    docker push "$DOCKER_IMAGE"
+                    docker logout
+                """
             }
+        }
+    }
+}
+
         }
     }
 
