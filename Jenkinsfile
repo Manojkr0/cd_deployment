@@ -1,21 +1,27 @@
 pipeline {
     agent any
 
+    parameters {
+        string(name: 'IMAGE_NAME', defaultValue: 'manojkumar8008/myapp1', description: 'Docker Image Name (e.g., user/image)')
+        string(name: 'IMAGE_TAG', defaultValue: 'latest', description: 'Docker Image Tag')
+        string(name: 'BRANCH_NAME', defaultValue: 'master', description: 'Git Branch to Checkout')
+        string(name: 'GIT_REPO_URL', defaultValue: 'https://github.com/Manojkr0/python_code.git', description: 'Git Repository URL')
+    }
+
     environment {
-        IMAGE_NAME = 'manojkumar8008/myapp1'
-        IMAGE_TAG = 'latest'
+        DOCKER_IMAGE = "${params.IMAGE_NAME}:${params.IMAGE_TAG}"
     }
 
     stages {
         stage('Clone Repo') {
             steps {
-                git branch: 'master', credentialsId: 'github-cred-id', url: 'https://github.com/Manojkr0/python_code.git'
+                git branch: "${params.BRANCH_NAME}", credentialsId: 'github-cred-id', url: "${params.GIT_REPO_URL}"
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .'
+                sh 'docker build -t $DOCKER_IMAGE .'
             }
         }
 
@@ -24,7 +30,7 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                     sh '''
                         echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-                        docker push ${IMAGE_NAME}:${IMAGE_TAG}
+                        docker push $DOCKER_IMAGE
                         docker logout
                     '''
                 }
@@ -34,7 +40,7 @@ pipeline {
 
     post {
         success {
-            echo "✅ Docker image pushed: ${IMAGE_NAME}:${IMAGE_TAG}"
+            echo "✅ Docker image pushed: $DOCKER_IMAGE"
         }
         failure {
             echo "❌ Pipeline failed"
