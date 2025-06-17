@@ -17,6 +17,7 @@ pipeline {
           env.DOCKER_IMAGE = "${env.IMAGE_NAME} : ${env.IMAGE_TAG}"
       }
     }
+      }
         stage('Clone Repo') {
             steps {
                 git branch: ${env.BRANCH_NAME}, credentialsId: 'github-cred-id', url: ${env.GIT_REPO_URL}
