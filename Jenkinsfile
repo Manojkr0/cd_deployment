@@ -16,13 +16,17 @@ stage('Read Properties') {
             if (!fileExists('jenkins.properties')) {
                 error "jenkins.properties not found"
             }
+
             def props = readProperties file: 'jenkins.properties'
 
-            // Store into environment variables for later use
-            env.GIT_REPO_URL = props['GIT_REPO_URL']
-            env.BRANCH_NAME = props['BRANCH_NAME']
-            env.IMAGE_NAME = props['IMAGE_NAME']
-            env.IMAGE_TAG = props['IMAGE_TAG']
+            // Store into env with fallback
+            env.GIT_REPO_URL = props['GIT_REPO_URL'] ?: 'https://github.com/Manojkr0/python_code.git'
+            env.BRANCH_NAME  = props['BRANCH_NAME'] ?: 'main'
+            env.IMAGE_NAME   = props['IMAGE_NAME'] ?: 'manojkumar8008/myapp1'
+            env.IMAGE_TAG    = props['IMAGE_TAG'] ?: 'latest'
+
+            echo "🔍 Using branch: ${env.BRANCH_NAME}"
+            echo "🔍 Cloning repo: ${env.GIT_REPO_URL}"
         }
     }
 }
