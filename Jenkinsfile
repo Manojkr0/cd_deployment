@@ -53,7 +53,7 @@ pipeline {
                     script {
                         sh """
                             echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-                            docker push "${env.DOCKER_IMAGE}"
+                            docker push ${env.DOCKER_IMAGE}
                             docker logout
                         """
                     }
