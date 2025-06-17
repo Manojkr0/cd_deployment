@@ -1,19 +1,30 @@
 pipeline {
     agent any
 
+    environment {
+        // Define empty, will populate in script block
+        GIT_REPO_URL = ''
+        IMAGE_NAME = ''
+        IMAGE_TAG = ''
+        BRANCH_NAME = ''
+    }
+
     stages {
         stage('Read Properties') {
             steps {
                 script {
-                    // Load properties from the file in the workspace
-                    def props = readProperties file: 'jenkins.properties'
+                    def propsFile = 'jenkins.properties'
+                    if (!fileExists(propsFile)) {
+                        error "❌ File '${propsFile}' not found in workspace!"
+                    }
 
-                    // Assign them to environment variables
+                    def props = readProperties file: propsFile
+
                     env.GIT_REPO_URL = props['GIT_REPO_URL']
                     env.IMAGE_NAME = props['IMAGE_NAME']
                     env.IMAGE_TAG = props['IMAGE_TAG']
                     env.BRANCH_NAME = props['BRANCH_NAME']
-                    env.DOCKER_IMAGE = "${env.IMAGE_NAME}:${env.IMAGE_TAG}"  // No space around colon
+                    env.DOCKER_IMAGE = "${env.IMAGE_NAME}:${env.IMAGE_TAG}"
                 }
             }
         }
