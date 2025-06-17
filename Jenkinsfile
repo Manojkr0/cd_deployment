@@ -1,26 +1,26 @@
 pipeline {
     agent any
-    
 
     stages {
-      stage('Read Properties') {
-      steps {
-        script {
-          // Load properties from the file in the workspace
-          def props = readProperties file: 'jenkins.properties'
+        stage('Read Properties') {
+            steps {
+                script {
+                    // Load properties from the file in the workspace
+                    def props = readProperties file: 'jenkins.properties'
 
-          // You can also assign them to environment variables if needed
-          env.GIT_REPO_URL = props['GIT_REPO_URL']
-          env.IMAGE_NAME = props['IMAGE_NAME']
-          env.IMAGE_TAG = props['IMAGE_TAG']
-          env.BRANCH_NAME = props['BRANCH_NAME']
-          env.DOCKER_IMAGE = "${env.IMAGE_NAME} : ${env.IMAGE_TAG}"
-      }
-    }
-      }
+                    // Assign them to environment variables
+                    env.GIT_REPO_URL = props['GIT_REPO_URL']
+                    env.IMAGE_NAME = props['IMAGE_NAME']
+                    env.IMAGE_TAG = props['IMAGE_TAG']
+                    env.BRANCH_NAME = props['BRANCH_NAME']
+                    env.DOCKER_IMAGE = "${env.IMAGE_NAME}:${env.IMAGE_TAG}"  // No space around colon
+                }
+            }
+        }
+
         stage('Clone Repo') {
             steps {
-                git branch: ${env.BRANCH_NAME}, credentialsId: 'github-cred-id', url: ${env.GIT_REPO_URL}
+                git branch: "${env.BRANCH_NAME}", credentialsId: 'github-cred-id', url: "${env.GIT_REPO_URL}"
             }
         }
 
@@ -45,7 +45,7 @@ pipeline {
 
     post {
         success {
-            echo "✅ Docker image pushed: $DOCKER_IMAGE"
+            echo "✅ Docker image pushed: ${env.DOCKER_IMAGE}"
         }
         failure {
             echo "❌ Pipeline failed"
