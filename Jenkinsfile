@@ -24,8 +24,7 @@ pipeline {
                     def props = readProperties file: 'jenkins.properties'
                     env.IMAGE_NAME = props['IMAGE_NAME']
                     env.IMAGE_TAG  = props['IMAGE_TAG']
-                    env.DOCKER_IMAGE = ${env.IMAGE_NAME}:${env.IMAGE_TAG}
-                    echo "${env.DOCKER_IMAGE}"
+                    echo "${env.IMAGE_NAME}"
                 }
             }
         }
