@@ -7,7 +7,7 @@ pipeline {
     }
 
     environment {
-        ARTIFACTORY_SERVER_ID = 'https://trial3hhxqs.jfrog.io/artifactory/artifact1-libs-snapshot' // Jenkins Artifactory Server ID
+        ARTIFACTORY_SERVER_ID = 'jfrog-credentials' 
     }
 
     parameters {
