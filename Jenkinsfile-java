@@ -6,7 +6,7 @@ pipeline {
     }
 
     environment {
-        ARTIFACTORY_SERVER_ID = 'artifactory-server' // Jenkins Artifactory Server ID
+        ARTIFACTORY_SERVER_ID = 'https://trial3hhxqs.jfrog.io/artifactory/artifact1-libs-snapshot' // Jenkins Artifactory Server ID
     }
     parameters {
         string(name: 'GIT_REPO_URL', description: 'Git repository URL to clone')
