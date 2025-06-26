@@ -3,7 +3,7 @@ pipeline {
 
     tools {
         maven 'Maven 3.8.5' // Name from Jenkins Global Tool Config
-        jdk 'jdk9'        // Name from Jenkins Global Tool Config
+        jdk 'jdk8'        // Name from Jenkins Global Tool Config
     }
 
     environment {
