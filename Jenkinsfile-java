@@ -1,5 +1,6 @@
 pipeline {
     agent any
+
     tools {
         maven 'Maven 3.8.5' // Name from Jenkins Global Tool Config
         jdk 'JDK 11'        // Name from Jenkins Global Tool Config
@@ -7,14 +8,12 @@ pipeline {
 
     environment {
         ARTIFACTORY_SERVER_ID = 'https://trial3hhxqs.jfrog.io/artifactory/artifact1-libs-snapshot' // Jenkins Artifactory Server ID
-    }
-}
+    }
+
     parameters {
         string(name: 'GIT_REPO_URL', description: 'Git repository URL to clone')
         string(name: 'BRANCH_NAME', description: 'Branch name to build')
     }
-
-
 
     stages {
         stage('Clone Repo') {
@@ -26,6 +25,7 @@ pipeline {
                 }
             }
         }
+
         stage('Build & Deploy') {
             steps {
                 script {
@@ -46,7 +46,18 @@ pipeline {
                         ]
                     )
 
-                    server.publishBuildInfo buildInfo
+                    server.publishBuildInfo(buildInfo)
                 }
-            }
-        }    
+            }
+        }
+    }
+
+    post {
+        success {
+            echo "✅ Build and deploy successful!"
+        }
+        failure {
+            echo "❌ Pipeline failed. Check logs for details."
+        }
+    }
+}
